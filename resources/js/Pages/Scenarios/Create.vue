@@ -71,9 +71,14 @@ export default {
   data() {
     return {
       openTab: 1,
+      // form: this.$inertia.form({
+      //   start:{year: "2022",income:500000, cogs:200000, expenses:175000, depreciation: 0, interest:0, receivables: 80000, wip: 0, payables: 20000, inventory: 100000, startGrossProfit: 0, adjustedExpense: 0},
+      //   end:{year: "2023", income:550000, cogs:222000.00, expenses:192500, depreciation: 121000.00, interest:0, receivables: 88000, wip: 0, payables: 22000, inventory: 110000, growth: 10, startGrossProfit: 0, adjustedExpense: 0},
+      //   businessData: {}
+      // }),
       form: this.$inertia.form({
-        start:{year: "2022",income:500000, cogs:200000, expenses:175000, depreciation: 0, interest:0, receivables: 80000, wip: 0, payables: 20000, inventory: 100000, startGrossProfit: 0, adjustedExpense: 0},
-        end:{year: "2023", income:550000, cogs:222000.00, expenses:192500, depreciation: 121000.00, interest:0, receivables: 88000, wip: 0, payables: 22000, inventory: 110000, growth: 10, startGrossProfit: 0, adjustedExpense: 0},
+        start:{year: "2022",income:0, cogs:0, expenses:0, depreciation: 0, interest:0, receivables: 0, wip: 0, payables: 0, inventory: 0, startGrossProfit: 0, adjustedExpense: 0},
+        end:{year: "2023", income:0, cogs:0, expenses:0, depreciation: 0, interest:0, receivables: 0, wip: 0, payables: 0, inventory: 0, growth: 0, startGrossProfit: 0, adjustedExpense: 0},
         businessData: {}
       }),
       calculated: false,
