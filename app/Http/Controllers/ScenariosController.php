@@ -60,10 +60,18 @@ class ScenariosController extends Controller
 	        	'data' => Request::session()->get('data')
 	        ]);
     	}else{
-    		return Inertia::render('Scenarios/Draft',[
-	        	'businessId' => $id,
-	        	'businessData' => $businessData
-	        ]);
+    		return Inertia::render('Businesses/Index', [
+                'filters' => Request::all('search', 'trashed'),
+                'organizations' => Auth::user()->businesses()
+                    ->orderBy('company_name')
+                    ->filter(Request::only('search', 'trashed'))
+                    ->paginate(10)
+                    ->withQueryString()
+                    ->through(fn ($organization) => [
+                        'id' => $organization->id,
+                        'company_name' => $organization->company_name
+                    ]),
+            ]);
     	}
     }
 

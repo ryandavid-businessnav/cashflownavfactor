@@ -103,3 +103,10 @@
 .border-teal-900{
     border-color: #115e59;
 }
+
+.xero-sso-logo {
+    border-radius: 50%;
+    width: 2em;
+    margin: 0.25em 9px 0.25em 0.25em;
+    vertical-align: middle;
+}

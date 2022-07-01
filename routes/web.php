@@ -184,4 +184,16 @@ Route::get('/img/{path}', [ImagesController::class, 'show'])
     ->where('path', '.*')
     ->name('image');
 
+//Xero implementations
+Route::get('/manage/xero', [App\Http\Controllers\XeroController::class, 'redirectUserToXero'])->name('redirectUserToXero');
+
+
+Route::get('/xero/signup', [App\Http\Controllers\XeroController::class, 'xeroSignup'])->name('xeroSignup');
+Route::get('/xero/signin', [App\Http\Controllers\XeroController::class, 'xeroSignin'])->name('xeroSignin');
+
+Route::get('/xero/callback', [App\Http\Controllers\XeroController::class, 'redirectToXero'])->name('redirectToXero');
+Route::get('/xero/auth/callback', [App\Http\Controllers\XeroController::class, 'handleCallbackFromXero'])->name('handleCallbackFromXero');
+
+Route::post('/save-user', [App\Http\Controllers\XeroController::class, 'saveUser'])->name('saveUser');
+
 require __DIR__.'/auth.php';
