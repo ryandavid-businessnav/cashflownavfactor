@@ -22,6 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'gplay_order_token',
+        'gplay_order_id',
+        'apple_order_id',
+        'datetime_subscribed',
+        'lastpayment_datetime',
     ];
 
     /**
@@ -104,5 +109,29 @@ class User extends Authenticatable
                 $query->onlyTrashed();
             }
         });
+    }
+
+    public function isSubscribed()
+    {
+        $one_month = now()->subDays(32);
+        $is_subscribed = (!is_null($this->datetime_subscribed)) ? $this->datetime_subscribed->greaterThanOrEqualTo($one_month) : false;
+        return $is_subscribed;
+    }
+
+
+    public function setSubscribed($stripe = [])
+    {
+        $this->datetime_subscribed = now();
+        $this->lastpayment_datetime = now()->toDateTimeString();
+
+        return $this;
+    }
+
+
+    public function setUnsubscribe()
+    {
+        $this->datetime_subscribed = null;
+        $this->last_payment_date = null;
+        return $this;
     }
 }

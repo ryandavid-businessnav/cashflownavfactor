@@ -29,5 +29,8 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-
+    'google_cloud' => [
+      'project_id' => env('GOOGLE_PROJECT_ID'),
+      'config_path' => 'app/cashflownav-42109-fb11c1ddd7b1.json',
+    ],
 ];

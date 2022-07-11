@@ -8,6 +8,7 @@
         "php": "^7.3|^8.0",
         "coconutcraig/laravel-postmark": "^2.11",
         "fruitcake/laravel-cors": "^2.0",
+        "google/cloud-pubsub": "^1.38",
         "guzzlehttp/guzzle": "^7.0.1",
         "inertiajs/inertia-laravel": "^0.5.4",
         "langleyfoxall/xero-laravel": "^3.1",

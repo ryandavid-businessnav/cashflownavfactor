@@ -35,9 +35,9 @@ class XeroController extends Controller
         $code_challenge = base64_encode(pack('H*', $hash));
         $codeChallenge = strtr(rtrim($code_challenge, '='), '+/', '-_');
 
-        return redirect('https://login.xero.com/identity/connect/authorize?response_type=code&code_challenge_method=S256&client_id=F6E5A2767452405A8C69BFC17DDE880D&scope=openid email profile accounting.settings offline_access accounting.contacts&redirect_uri=https://staging.cashflownavfactor.com/xero/callback&state=12345&code_challenge='.$codeChallenge);
+        // return redirect('https://login.xero.com/identity/connect/authorize?response_type=code&code_challenge_method=S256&client_id=F6E5A2767452405A8C69BFC17DDE880D&scope=openid email profile accounting.settings offline_access accounting.contacts&redirect_uri=https://staging.cashflownavfactor.com/xero/callback&state=12345&code_challenge='.$codeChallenge);
 
-        // return redirect('https://login.xero.com/identity/connect/authorize?response_type=code&code_challenge_method=S256&client_id=F6E5A2767452405A8C69BFC17DDE880D&scope=openid email profile accounting.settings offline_access accounting.contacts&redirect_uri=http://localhost:8001/xero/callback&state=12345&code_challenge='.$codeChallenge);
+        return redirect('https://login.xero.com/identity/connect/authorize?response_type=code&code_challenge_method=S256&client_id=F6E5A2767452405A8C69BFC17DDE880D&scope=openid email profile accounting.settings accounting.reports.read offline_access accounting.contacts&redirect_uri=http://localhost:8001/xero/callback&state=12345&code_challenge='.$codeChallenge);
     }
 
     public function redirectToXero(Request $request){
@@ -54,8 +54,8 @@ class XeroController extends Controller
                 'grant_type' => 'authorization_code',
                 'client_id' => 'F6E5A2767452405A8C69BFC17DDE880D',
                 'code' => $input['code'],
-                'redirect_uri' => 'https://staging.cashflownavfactor.com/xero/callback',
-                //'redirect_uri' => 'http://localhost:8001/xero/callback',
+                //'redirect_uri' => 'https://staging.cashflownavfactor.com/xero/callback',
+                'redirect_uri' => 'http://localhost:8001/xero/callback',
                 //'code_verifier' => 'thisismycode123thisismycode123thisismycode123thisismycode1234',
                 'code_verifier' => $code_verifier
             ]
@@ -68,7 +68,7 @@ class XeroController extends Controller
         $body = [
             'id_token' => $result['id_token'],
             'token_type' => 'Bearer',
-            'scope' => 'openid email profile accounting.settings offline_access accounting.contacts',
+            'scope' => 'openid email profile accounting.settings offline_access accounting.contacts accounting.reports.read',
             'access_token' => $result['access_token'],
             'refresh_token' => $result['refresh_token'],
             'expires' => $result['expires_in']
@@ -155,14 +155,14 @@ class XeroController extends Controller
 
             Auth::loginUsingId($user->id);
 
-            $request->session()->forget('xeroOrg');
-            $request->session()->forget('tenantInfo');
-            $request->session()->forget('tenantId');
-            $request->session()->forget('userInfo');
-            $request->session()->forget('accessToken');
-            $request->session()->forget('access_token');
-            $request->session()->forget('phoneNumber');
-            $request->session()->forget('jwtPayload');
+            // $request->session()->forget('xeroOrg');
+            // $request->session()->forget('tenantInfo');
+            // $request->session()->forget('tenantId');
+            // $request->session()->forget('userInfo');
+            // $request->session()->forget('accessToken');
+            // $request->session()->forget('access_token');
+            // $request->session()->forget('phoneNumber');
+            // $request->session()->forget('jwtPayload');
 
             return redirect('/');
         }else{
@@ -288,13 +288,13 @@ class XeroController extends Controller
         //     $org->save();
         // }
 
-        $request->session()->forget('xeroOrg');
-        $request->session()->forget('tenantInfo');
-        $request->session()->forget('tenantId');
-        $request->session()->forget('userInfo');
-        $request->session()->forget('accessToken');
-        $request->session()->forget('access_token');
-        $request->session()->forget('phoneNumber');
+        // $request->session()->forget('xeroOrg');
+        // $request->session()->forget('tenantInfo');
+        // $request->session()->forget('tenantId');
+        // $request->session()->forget('userInfo');
+        // $request->session()->forget('accessToken');
+        // $request->session()->forget('access_token');
+        // $request->session()->forget('phoneNumber');
 
         return redirect('/xero/signin');
     }
@@ -308,5 +308,24 @@ class XeroController extends Controller
         // dd($request->session()->get('jwtPayload'));
         return redirect('/');
 
+    }
+
+    public function getXeroData(Request $request){
+        $user = Auth::user();
+        $accessToken = $request->session()->get('accessToken');
+        $tenantId = $request->session()->get('tenantId');
+
+        $xero = new XeroApp(
+            new AccessToken(collect($accessToken)->toArray()),
+            $tenantId
+        );
+
+        $balanceSheet = $xero->reportBalanceSheets()->get();
+        $profitAndLoss = $xero->reportProfitLosses()->where('toDate','2022-04-01')->get();
+        dd($profitAndLoss);
+        return $balanceSheet;
+        dd(collect($balanceSheet)->toArray()[0]['Rows']);
+        dd($request->session()->get('tenantInfo'));
+        dd($user);
     }
 }

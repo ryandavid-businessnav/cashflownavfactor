@@ -196,4 +196,6 @@ Route::get('/xero/auth/callback', [App\Http\Controllers\XeroController::class, '
 
 Route::post('/save-user', [App\Http\Controllers\XeroController::class, 'saveUser'])->name('saveUser');
 
+Route::get('/xero/get-data', [App\Http\Controllers\XeroController::class, 'getXeroData'])->name('getXeroData');
+
 require __DIR__.'/auth.php';
